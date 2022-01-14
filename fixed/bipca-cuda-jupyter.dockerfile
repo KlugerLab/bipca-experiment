@@ -58,6 +58,7 @@ RUN printf "\nc = get_config()" >> /home/$UNAME/.ipython/profile_default/ipython
 RUN printf "\nc.InlineBackend.print_figure_kwargs={'facecolor' : 'w'}">> /home/$UNAME/.ipython/profile_default/ipython_kernel_config.py
 RUN echo "conda activate experiment" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
+RUN mamba run -n experiment pip install /bipca 
 #COPY entrypoint.sh ./
 #RUN chown -R $UNAME:$UNAME entrypoint.sh
 #RUN chmod +x entrypoint.sh
