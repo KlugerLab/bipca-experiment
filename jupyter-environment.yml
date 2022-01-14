@@ -42,6 +42,4 @@ dependencies:
   - pip:
     - allcools
     - python-benedict
-  
-
-  
+    - wheel

@@ -5,7 +5,7 @@ ARG UNAME
 ARG UID
 ARG GID
 ARG ENV=base-environment.yml
-ADD ./bipca/python /bipca
+COPY --chown=$UID:$GID ./bipca/python /bipca
 WORKDIR /home/$UNAME/container
 COPY $ENV ./environment.yml
 

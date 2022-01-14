@@ -4,7 +4,7 @@ FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
 ARG UNAME
 ARG UID
 ARG GID
-ADD ./bipca/python /bipca
+COPY --chown=$UID:$GID ./bipca/python /bipca
 ARG ENV=jupyter-environment.yml
 WORKDIR /home/$UNAME/container
 COPY $ENV ./environment.yml
