@@ -11,8 +11,6 @@ channels:
   - bioconda
 dependencies:
   - pip
-  - jupyterlab 
-  - jupyter
   - cudatoolkit=10.2
   - pytorch
   - torchvision
