@@ -5,7 +5,10 @@ ARG UNAME
 ARG UID
 ARG GID
 ADD ./bipca/python /bipca
+ARG ENV=jupyter-environment.yml
 WORKDIR /home/$UNAME/container
+COPY $ENV ./environment.yml
+
 # set bash as current shell
 SHELL ["/bin/bash", "-c"]
 RUN whoami
