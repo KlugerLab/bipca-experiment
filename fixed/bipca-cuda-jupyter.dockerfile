@@ -60,4 +60,4 @@ SHELL ["/bin/bash", "--login", "-c"]
 #RUN chmod +x entrypoint.sh
 #ENTRYPOINT ["./entrypoint.sh"]
 
-ENTRYPOINT ["conda","run","-n","bipca-experiment","jupyter-lab","&","/bin/bash"]
+ENTRYPOINT ["conda","run","-n","experiment","jupyter-lab","&","/bin/bash"]

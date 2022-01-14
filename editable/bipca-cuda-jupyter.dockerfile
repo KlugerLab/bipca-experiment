@@ -54,11 +54,11 @@ RUN printf "\nc = get_config()" >> /home/$UNAME/.ipython/profile_default/ipython
 RUN printf "\nc.InlineBackend.print_figure_kwargs={'facecolor' : 'w'}">> /home/$UNAME/.ipython/profile_default/ipython_config.py
 RUN printf "\nc = get_config()" >> /home/$UNAME/.ipython/profile_default/ipython_kernel_config.py
 RUN printf "\nc.InlineBackend.print_figure_kwargs={'facecolor' : 'w'}">> /home/$UNAME/.ipython/profile_default/ipython_kernel_config.py
-RUN echo "conda activate bipca-experiment" >> ~/.bashrc
+RUN echo "conda activate experiment" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
 #COPY entrypoint.sh ./
 #RUN chown -R $UNAME:$UNAME entrypoint.sh
 #RUN chmod +x entrypoint.sh
 #ENTRYPOINT ["./entrypoint.sh"]
 
-ENTRYPOINT ["conda","run","--no-capture-output","-n","experiment","pip","install","-e","/code","&","conda","run","-n","bipca-experiment","jupyter-lab","&","/bin/bash"]
+ENTRYPOINT ["conda","run","--no-capture-output","-n","experiment","pip","install","-e","/code","&","conda","run","-n","bipca","jupyter-lab","&","/bin/bash"]

@@ -1,0 +1,4 @@
+/bipca/experiments/*
+/bipca/matlab/*
+!*.yml
+*.gitmodules

@@ -41,7 +41,7 @@ ARG PATH="/home/$UNAME/mambaforge/bin:$PATH"
 RUN mamba env create -f environment.yml
 RUN mamba init
 
-RUN echo "conda activate bipca-experiment" >> ~/.bashrc
+RUN echo "conda activate experiment" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
 #COPY entrypoint.sh ./
 #RUN chown -R $UNAME:$UNAME entrypoint.sh
