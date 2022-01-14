@@ -61,4 +61,4 @@ SHELL ["/bin/bash", "--login", "-c"]
 #RUN chmod +x entrypoint.sh
 #ENTRYPOINT ["./entrypoint.sh"]
 
-ENTRYPOINT ["conda","run","--no-capture-output","-n","bipca-experiment","pip","install","-e","/code","&","conda","run","-n","bipca-experiment","jupyter-lab","&","/bin/bash"]
+ENTRYPOINT ["conda","run","--no-capture-output","-n","experiment","pip","install","-e","/code","&","conda","run","-n","bipca-experiment","jupyter-lab","&","/bin/bash"]

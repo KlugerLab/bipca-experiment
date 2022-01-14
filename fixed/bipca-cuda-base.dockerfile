@@ -4,9 +4,8 @@ FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
 ARG UNAME
 ARG UID
 ARG GID
-ARG ENV=*.yml
+ADD ./bipca/python /bipca
 WORKDIR /home/$UNAME/container
-COPY $ENV ./environment.yml
 # set bash as current shell
 SHELL ["/bin/bash", "-c"]
 RUN whoami
@@ -41,11 +40,12 @@ ARG PATH="/home/$UNAME/mambaforge/bin:$PATH"
 RUN mamba env create -f environment.yml
 RUN mamba init
 
-RUN echo "conda activate bipca-experiment" >> ~/.bashrc
+RUN echo "conda activate experiment" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
+RUN mamba run -n experiment pip install /bipca 
 #COPY entrypoint.sh ./
 #RUN chown -R $UNAME:$UNAME entrypoint.sh
 #RUN chmod +x entrypoint.sh
 #ENTRYPOINT ["./entrypoint.sh"]
 
-ENTRYPOINT ["conda","run","--no-capture-output","-n","bipca-experiment","pip","install","-e","/code","&"]
+

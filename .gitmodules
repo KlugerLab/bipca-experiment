@@ -1,0 +1,3 @@
+[submodule "bipca"]
+	path = bipca
+	url = git@github.com:KlugerLab/bipca.git
