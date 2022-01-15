@@ -5,11 +5,10 @@
 # Output: save the 5 normalization matrix into a h5ad file
 
 suppressMessages({
-  library(anndata,lib.loc = "/usr/local/lib/R/site-library/")
-  library(Seurat,lib.loc = "/usr/local/lib/R/site-library/")
-  library(SeuratWrappers,lib.loc = "/usr/local/lib/R/site-library/")
-  library(docopt)
-)}
+  # library(anndata,lib.loc = "/usr/local/lib/R/site-library/")
+  # library(Seurat,lib.loc = "/usr/local/lib/R/site-library/")
+  # library(SeuratWrappers,lib.loc = "/usr/local/lib/R/site-library/")
+  library(docopt)})
 doc<-'Run Normalization.
     take a h5ad file (.X being the count matrix) as input
     run 4 normalization methods (log1p,SCT,Sanity,ALRA)
