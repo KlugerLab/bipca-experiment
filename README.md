@@ -8,7 +8,7 @@ To get started immediately, you can run
 
 `docker run -it --rm -p 8080:8080 -p 8029:8787 -e USER=$(id --name -u) -e USERID=$(id -g) --name bipca -v /data:/data bipca-experiment:latest`, 
 
-changing `/data:/data` to `<your local_data_directory:/data`. This will launch `jupyter-lab` on host port 8080 and `rstudio` on port `8029`. 
+changing `/data:/data` to `<your_local_data_directory>:/data`. This will launch `jupyter-lab` on host port 8080 and `rstudio` on port `8029`. 
 The details of this command are provided in "An example run command".
 
 
