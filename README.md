@@ -2,7 +2,13 @@
 
 This repository contains the necessary files to reproduce experiments from the bipca paper. We recommend that you use the docker image `bipca-experiment:latest`, however all of the necessary files for reproducing our experimental installation are contained within. 
 ## The docker image `bipca-experiment:latest`
-The best way to reproduce the bipca environment is to launch a container from `bipca-experiment:latest`. Every experiment in the paper was created with this image.
+The best way to reproduce the bipca environment is to launch a container from `bipca-experiment:latest`. Every experiment in the paper was created with this image. Below we detail container configuration and walk through what the image does at runtime. 
+
+To get started immediately, you can run
+`docker run -it --rm -p 8080:8080 -p 8029:8787 -e USER=$(id --name -u) -e USERID=$(id -g) --name bipca -v /data:/data bipca-experiment:latest`, 
+changing `/data:/data` to `<your local_data_directory:/data`. This will launch `jupyter-lab` on host port 8080 and `rstudio` on port `8029`. 
+The details of this command are provided in "An example run command".
+
 
 ### Environment variables for running the image
 The environment variables for this image are important.  They are:
