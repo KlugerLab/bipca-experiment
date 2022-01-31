@@ -12,7 +12,6 @@ RUN /install-scripts/python/install_python.sh
 ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
 COPY ./docker-shell-scripts/_activate_current_env.sh /usr/local/bin/_activate_current_env.sh
 COPY ./docker-shell-scripts/_dockerfile_shell.sh /usr/local/bin/_dockerfile_shell.sh
-COPY ./root /root
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
 
 
@@ -20,7 +19,8 @@ FROM rocker/rstudio:4.1.1 as rstudio
 #COPY ALL THE CONDA STUFF FROM THE PREVIOUS BUILD STAGE
 COPY --from=python /opt/conda /opt/conda
 COPY --from=python /docker /docker
-COPY --from=python /root /root
+COPY ./root/.ccache /root/.ccache
+COPY ./root/.R /root/.R
 COPY --from=python /usr/local/bin /usr/local/bin
 COPY --from=python /install-scripts /install-scripts
 RUN chmod -R 777 /root
