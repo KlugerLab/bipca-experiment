@@ -3,18 +3,14 @@
 #   conda env create -f environment.yml
 #   conda activate mpl-dev
 #   pip install -e .
-#
-name: base
+name: bipca-experiment
 channels:
   - conda-forge
   - pytorch
   - bioconda
 dependencies:
+  - python=3.9
   - pip
-  - cudatoolkit=10.2
-  - pytorch
-  - torchvision
-  - torchaudio
   - mkl
   - matplotlib
   - pandas
@@ -30,17 +26,16 @@ dependencies:
   - xarray
   - scanpy
   - threadpoolctl
-  - pybedtools
   - plotly
   - opentsne
   - netcdf4
   - bedtools
   - texlive-core
   - tqdm
+  - ccache
+  - jupyterlab
+  - jupyter 
   - pip:
-    - allcools
-    - python-benedict
-    - wheel
-  
+    - --requirement requirements.txt
 
   

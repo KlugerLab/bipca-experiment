@@ -2,3 +2,4 @@
 /bipca/matlab/*
 !*.yml
 *.gitmodules
+*.md
