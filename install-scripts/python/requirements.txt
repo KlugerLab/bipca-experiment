@@ -3,5 +3,4 @@ torch==1.10.1+cpu
 allcools
 python-benedict
 wheel
-pybedtools
   
