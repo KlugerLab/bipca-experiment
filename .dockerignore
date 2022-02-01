@@ -3,3 +3,4 @@
 !*.yml
 *.gitmodules
 *.md
+build.sh

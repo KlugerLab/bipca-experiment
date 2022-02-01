@@ -14,4 +14,6 @@ if [ "$RSTUDIO" = true ] ; then
 else
     touch /etc/services.d/rstudio/down
 fi
+
+
 exec /init sudo -E -u $USER -s $@ 
