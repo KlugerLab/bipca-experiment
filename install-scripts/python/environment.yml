@@ -30,11 +30,13 @@ dependencies:
   - opentsne
   - netcdf4
   - bedtools
+  - htslib
   - texlive-core
   - tqdm
   - ccache
   - jupyterlab
-  - jupyter 
+  - jupyter
+  - pybedtools 
   - pip:
     - --requirement requirements.txt
 
