@@ -1,4 +1,3 @@
 #!/usr/bin/with-contenv bash
-for line in $( cat /etc/environment ) ; do export $line > /dev/null; done
 nohup s6-setuidgid $USER /opt/conda/envs/bipca-experiment/bin/jupyter-lab > error.log
 
