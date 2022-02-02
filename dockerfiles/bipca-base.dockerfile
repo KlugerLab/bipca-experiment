@@ -7,7 +7,6 @@ RUN apt-get update -y && \
 
 COPY ./install-scripts/python /install-scripts/python
 
-RUN chmod -R 777 /opt
 RUN /install-scripts/python/install_python.sh
 ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
 COPY ./docker-shell-scripts/_activate_current_env.sh /usr/local/bin/_activate_current_env.sh
@@ -69,20 +68,63 @@ ENV USERID=1000
 ENV ROOT=true
 ENV JUPYTER=true
 ENV RSTUDIO=true
-
+#s6 services config
 COPY ./etc/services.d/jupyter /etc/services.d/jupyter
+#jupyter config
 COPY ./root/.jupyter /root/.jupyter
+#ipython config
 COPY ./root/.ipython /root/.ipython
+#entrypoint script
+COPY ./docker-shell-scripts/service_entrypoint.sh /usr/local/bin/service_entrypoint.sh
+#conda config script
+COPY /root/.condarc /root/.condarc
 
-RUN echo "export PATH=/root/.local/bin:$PATH" >> /root/.bashrc 
-RUN cp -r /root /home/$DEFAULT_USER
-RUN chmod -R 777 /root
-ENV PATH /root/.local/bin:$PATH
-RUN chsh -s /bin/bash $DEFAULT_USER
+# modify the path to make pip happy
+RUN echo 'export PATH=/home/$USER/.local/bin:/root/.local/bin:'$PATH'' >> /root/.bashrc 
+# copy all the configuration and . files from root into $DEFAULT_USER,
+# as that is what we have been editing and it appears that s6 maps $DEFAULT_USER
+# to $USER
+RUN chmod -R 777 /root && \
+    cp -a /root/. /home/$DEFAULT_USER/ && \
+    chown -R $DEFAULT_USER:staff /opt && \
+    chmod -R 777 /opt/conda
+ENV PATH /home/\$USER/.local/bin:/root/.local/bin:$PATH
+
+# make some modifications to the default paths so that sudo has the same basic path
+RUN sed -i "11s|.*|Defaults	secure_path = $(echo $PATH)|" /etc/sudoers
+# make /etc/environment have the conda path in it so that processes that read from
+# /etc/environment have the correct paths.
+RUN sed -i "s|.*PATH=.*|PATH=$(echo $PATH)|" /etc/environment
+# modify the userconf startup script...
+# Add a command to chown /opt/conda. This is required for some packages to work properly,
+# and conda/mamba can now be used without sudo. (THIS IS COVERED IN THE ENTRYPOINT BY THE ENV VARIABLE)
+#RUN printf '\n echo "chown -R $USER /opt/conda"\nchown -R $USER /opt/conda/' >> /etc/cont-init.d/userconf
+# For some reason, the original userconf doesn't copy the home directory unless 
+# the user id is 1000. So we need to edit the file by removing a few lines and changing others.
+# we'll just clear the lines and then re-insert where necessary
+# clear:
+RUN sed -i '/.*useradd -m $USER -u $USERID.*/d ' /etc/cont-init.d/userconf && \
+    sed -i '/.*mkdir -p \/home\/$USER.*/d '  /etc/cont-init.d/userconf && \
+    sed -i '/.*echo "deleting the default user".*/d' /etc/cont-init.d/userconf && \
+    sed -i '/.*userdel $DEFAULT_USER.*/d' /etc/cont-init.d/userconf
+
+#now insert the lines we need
+#First we change the username of the $DEFAULT USER to $USER
+RUN sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -l $USER $DEFAULT_USER' /etc/cont-init.d/userconf && \
+    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -u $USERID $USER' /etc/cont-init.d/userconf && \
+    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ cp -r \/root\/ \/home\/$USER' /etc/cont-init.d/userconf && \
+    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -d \/home\/$USER $USER' /etc/cont-init.d/userconf && \
+    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ groupmod -g $GROUPID -n $USER $DEFAULT_USER' /etc/cont-init.d/userconf && \
+    sed -i 's/.*chown -R $USER \/home\/$USER.*/chown -R $USER:$USER \/home\/$USER/' /etc/cont-init.d/userconf
+
+
 #Install the bipca scripts
+
+
+# first copy to /bipca. this will be the default package that is pip installed at runtime.
 COPY ./bipca/python /bipca
+# the script for normalization methods
 COPY runNormalization.r /bipca-experiments/runNormalization.r
 RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
-COPY ./docker-shell-scripts/service_entrypoint.sh /usr/local/bin/service_entrypoint.sh
 
 ENTRYPOINT ["service_entrypoint.sh"]
