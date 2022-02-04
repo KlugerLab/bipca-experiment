@@ -1,4 +1,3 @@
-
 FROM continuumio/miniconda3:4.10.3p1 AS python
 
 WORKDIR /docker
@@ -12,29 +11,36 @@ ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
 COPY ./docker-shell-scripts/_activate_current_env.sh /usr/local/bin/_activate_current_env.sh
 COPY ./docker-shell-scripts/_dockerfile_shell.sh /usr/local/bin/_dockerfile_shell.sh
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
-
+RUN conda clean --all
 
 FROM rocker/rstudio:4.1.1 as rstudio
 #COPY ALL THE CONDA STUFF FROM THE PREVIOUS BUILD STAGE
-COPY --from=python /opt/conda /opt/conda
-COPY --from=python /docker /docker
-COPY ./root/.ccache /root/.ccache
-COPY ./root/.R /root/.R
-COPY --from=python /usr/local/bin /usr/local/bin
-COPY --from=python /install-scripts /install-scripts
-RUN chmod -R 777 /root
-RUN chmod -R 777 /home/
-RUN chmod -R 777 /docker
 #SET UP THE CONDA ENVIRONMENT
-ENV PATH /opt/conda/bin:/opt/conda/condabin:/opt/conda/bin:$PATH
-ENV CONDA_PREFIX=/opt/conda
-ENV CONDA_EXE=/opt/conda/bin/conda
+ENV CONDA_EXE=/opt/conda/bin/conda 
+ENV CONDA_PREFIX=/opt/conda/envs/bipca-experiment 
+ENV CONDA_PROMPT_MODIFIER=(bipca-experiment) 
+ENV _CE_CONDA= 
+ENV CONDA_SHLVL=1 
+ENV SHLVL=0 
+ENV CONDA_PYTHON_EXE=/opt/conda/bin/python 
 ENV CONDA_DEFAULT_ENV=bipca-experiment
-ENV CONDA_PYTHON_EXE=/opt/conda/bin/python
+ENV PATH=/opt/conda/envs/bipca-experiment/bin:/opt/conda/condabin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/bin:$PATH
+COPY --from=python /usr/local/bin /usr/local/bin
 RUN ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate bipca-experiment" >> ~/.bashrc
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
+COPY --from=python /opt/conda /opt/conda
+
+COPY --from=python /docker /docker
+COPY ./root/.ccache /root/.ccache
+COPY ./root/.R /root/.R
+COPY --from=python /install-scripts /install-scripts
+RUN chmod -R 777 /root
+RUN chmod -R 777 /home/
+RUN chmod -R 777 /docker
+
+
 # Default command for "docker run"
 CMD ["/bin/bash"]
 
@@ -70,6 +76,7 @@ ENV JUPYTER=true
 ENV RSTUDIO=true
 #s6 services config
 COPY ./etc/services.d/jupyter /etc/services.d/jupyter
+RUN touch /var/log/jupyter.log 
 #jupyter config
 COPY ./root/.jupyter /root/.jupyter
 #ipython config
@@ -115,14 +122,19 @@ RUN sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -l $USER $DEFAULT_
     sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ cp -r \/root\/ \/home\/$USER' /etc/cont-init.d/userconf && \
     sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -d \/home\/$USER $USER' /etc/cont-init.d/userconf && \
     sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ groupmod -g $GROUPID -n $USER $DEFAULT_USER' /etc/cont-init.d/userconf && \
-    sed -i 's/.*chown -R $USER \/home\/$USER.*/chown -R $USER:$USER \/home\/$USER/' /etc/cont-init.d/userconf
+    sed -i 's/.*chown -R $USER \/home\/$USER.*/chown -R $USER:$USER \/home\/$USER\//' /etc/cont-init.d/userconf && \
+    sed -i '/.*chown -R $USER:$USER \/home\/$USER\//a \ \ \ \ chown -R $USER:$USER \/bipca' /etc/cont-init.d/userconf
+
 
 
 #Install the bipca scripts
 
 
+ARG BIPCA_VERRSION=
 # first copy to /bipca. this will be the default package that is pip installed at runtime.
 COPY ./bipca/python /bipca
+COPY ./etc/cont-init.d/z_install_bipca /etc/cont-init.d/z_install_bipca
+RUN touch /var/log/pip.log
 # the script for normalization methods
 COPY runNormalization.r /bipca-experiments/runNormalization.r
 RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
