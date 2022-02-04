@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+echo "Installing the python module mounted at /bipca"
+export HOME="/home/$USER"
+#fix the permissions of /var/log/pip.log
+s6-setuidgid "$USER" pip install -e /bipca > /var/log/pip.log
+export HOME="/root"
