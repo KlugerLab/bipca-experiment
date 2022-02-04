@@ -29,6 +29,7 @@ ENV CONDA_EXE=/opt/conda/bin/conda \
 #grab all the docker shell scripts
 #grab all the docker shell scripts, wd, root config, install-scripts, conda
 COPY . /
+COPY --from=python /root /root
 COPY --from=python /opt/conda /opt/conda
 #do some symlinking and activation stuff (maybe not necessary?)
 SHELL ["_dockerfile_shell.sh"]
