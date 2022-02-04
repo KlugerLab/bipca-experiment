@@ -2,12 +2,7 @@ FROM continuumio/miniconda3:4.10.3p1 AS python
 
 WORKDIR /docker
 #install scripts
-COPY ./install-scripts /install-scripts
-#config files..
-COPY ./root /root
-#entrypoint stuff
-COPY ./docker-shell-scripts/ /usr/local/bin/
-COPY ./etc/services.d /etc/services.d
+COPY . /
 ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
 #get the build essentials (compilers etc)
 RUN apt-get update -y && \
@@ -30,12 +25,13 @@ ENV CONDA_EXE=/opt/conda/bin/conda \
     CONDA_DEFAULT_ENV=bipca-experiment \
     NCPUS=32 \
     GITHUB_PAT=$GITHUB_PAT \
-    PATH=/home/\$USER/.local/bin:/root/.local/bin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/condabin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/bin:$PATH
+    PATH=/docker-shell-scripts/home/\$USER/.local/bin:/root/.local/bin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/condabin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/bin:$PATH
 #grab all the docker shell scripts
 #grab all the docker shell scripts, wd, root config, install-scripts, conda
-COPY --from=python /etc/services.d /usr/local/bin /docker /root /install-scripts /opt/conda /
+COPY . /
+COPY --from=python /opt/conda /opt/conda
 #do some symlinking and activation stuff (maybe not necessary?)
-SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
+SHELL ["_dockerfile_shell.sh"]
 # Default command for "docker run"
 CMD ["/bin/bash"]
 RUN ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
@@ -115,7 +111,6 @@ ARG BIPCA_VERRSION=
 # first copy to /bipca. this will be the default package that is pip installed at runtime.
 COPY ./bipca/python /bipca
 # the script for normalization methods
-COPY runNormalization.r /bipca-experiments/runNormalization.r
 RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
 
 ENTRYPOINT ["service_entrypoint.sh"]
