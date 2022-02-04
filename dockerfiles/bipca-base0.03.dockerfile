@@ -25,7 +25,7 @@ ENV CONDA_EXE=/opt/conda/bin/conda \
     CONDA_DEFAULT_ENV=bipca-experiment \
     NCPUS=32 \
     GITHUB_PAT=$GITHUB_PAT \
-    PATH=/docker-shell-scripts/home/\$USER/.local/bin:/root/.local/bin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/condabin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/bin:$PATH
+    PATH=/docker-shell-scripts/:/home/\$USER/.local/bin:/root/.local/bin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/condabin:/opt/conda/envs/bipca-experiment/bin:/opt/conda/bin:$PATH
 #grab all the docker shell scripts
 #grab all the docker shell scripts, wd, root config, install-scripts, conda
 COPY . /
