@@ -1,5 +1,5 @@
-/bipca/experiments/*
-/bipca/matlab/*
+bipca/experiments/*
+bipca/matlab/*
 !*.yml
 *.gitmodules
 *.md
@@ -9,4 +9,4 @@
 *.gitmodules
 build.sh
 *README*
-/dockerfiles
+dockerfiles
