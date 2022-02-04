@@ -3,4 +3,10 @@
 !*.yml
 *.gitmodules
 *.md
+*.log
+*.gitignore
+*.dockerignore
+*.gitmodules
 build.sh
+*README*
+/dockerfiles
