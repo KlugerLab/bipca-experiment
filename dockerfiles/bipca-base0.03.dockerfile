@@ -109,6 +109,9 @@ ENV GITHUB_PAT='' \
 #the following line is to decache things
 ARG BIPCA_VERRSION=
 # first copy to /bipca. this will be the default package that is pip installed at runtime.
+#this may look like a redundant copy step (as we have already run COPY . /, so /bipca/python exists..)
+#however, pip looks to install from /bipca, not /bipca/python.
+#furthermore, this allows us to bump the bipca version without clearing upstream cache.
 COPY ./bipca/python /bipca
 # the script for normalization methods
 RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
