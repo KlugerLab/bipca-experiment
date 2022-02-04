@@ -1,6 +1,8 @@
 #!/usr/bin/with-contenv bash
 echo "Installing the python module mounted at /bipca"
+#change the home directory so pip can write to the correct folder,
+#s6-setuidgid lowers to $USER but doesn't source the $USER env
 export HOME="/home/$USER"
-#fix the permissions of /var/log/pip.log
 s6-setuidgid "$USER" pip install -e /bipca > /var/log/pip.log
+#reset the home directory because we don't want to break anything downstream!
 export HOME="/root"
