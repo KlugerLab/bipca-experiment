@@ -96,5 +96,6 @@ ARG BIPCA_VERRSION=
 COPY ./bipca/python /bipca
 # the script for normalization methods
 RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
+COPY ./etc/services.d/jupyter/run /etc/services.d/jupyter/run
 
 ENTRYPOINT ["service_entrypoint.sh"]

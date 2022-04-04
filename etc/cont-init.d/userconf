@@ -64,7 +64,7 @@ if [ "$USERID" -ne 1000 ]
 elif [ "$USER" != "$DEFAULT_USER" ]
   then
     ## cannot move home folder when it's a shared volume, have to copy and change permissions instead
-    cp -r /home/$DEFAULT_USER /home/$USER
+    cp -rT /home/$DEFAULT_USER /home/$USER
     ## RENAME the user
     usermod -l $USER -d /home/$USER $DEFAULT_USER
     groupmod -n $USER $DEFAULT_USER

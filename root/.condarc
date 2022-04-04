@@ -1,9 +1,7 @@
 pkgs_dirs:
- - ~/.conda/pkgs
  - /opt/conda/pkgs
 
 envs_dirs:
-  - ~/.conda/envs
   - /opt/conda/envs
 
 allow_softlinks: False
