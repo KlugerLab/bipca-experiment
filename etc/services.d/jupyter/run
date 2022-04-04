@@ -1,4 +1,4 @@
 #!/usr/bin/with-contenv bash
 # run jupyter under $USER and log to /var/log/jupyter.log
-nohup s6-setuidgid $USER /opt/conda/envs/bipca-experiment/bin/jupyter-lab --allow-root > /var/log/jupyter.log
+nohup s6-setuidgid $USER /root/.conda/envs/bipca-experiment/bin/jupyter-lab --allow-root > /var/log/jupyter.log
 
