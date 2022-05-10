@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 ## Set defaults for environmental variables in case they are undefined
-DEFAULT_USER=${DEFAULT_USER:-rstudio-bipca}
+DEFAULT_USER=${DEFAULT_USER:-rstudio}
 USER=${USER:=${DEFAULT_USER}}
 PASSWORD=${PASSWORD:=rstudio}
 USERID=${USERID:=1000}

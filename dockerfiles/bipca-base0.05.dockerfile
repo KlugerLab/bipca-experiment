@@ -97,27 +97,8 @@ RUN sed -i "11s|.*|Defaults	secure_path = $(echo $PATH)|" /etc/sudoers
 # /etc/environment have the correct paths.
 RUN sed -i "s|.*PATH=.*|PATH=$(echo $PATH)|" /etc/environment
 # modify the userconf startup script...
-# Add a command to chown /opt/conda. This is required for some packages to work properly,
-# and conda/mamba can now be used without sudo. (THIS IS COVERED IN THE ENTRYPOINT BY THE ENV VARIABLE)
-#RUN printf '\n echo "chown -R $USER /opt/conda"\nchown -R $USER /opt/conda/' >> /etc/cont-init.d/userconf
-# For some reason, the original userconf doesn't copy the home directory unless 
-# the user id is 1000. So we need to edit the file by removing a few lines and changing others.
-# we'll just clear the lines and then re-insert where necessary
-# clear:
-RUN sed -i '/.*useradd -m $USER -u $USERID.*/d ' /etc/cont-init.d/userconf && \
-    sed -i '/.*mkdir -p \/home\/$USER.*/d '  /etc/cont-init.d/userconf && \
-    sed -i '/.*echo "deleting the default user".*/d' /etc/cont-init.d/userconf && \
-    sed -i '/.*userdel $DEFAULT_USER.*/d' /etc/cont-init.d/userconf
 
-#now insert the lines we need
-#First we change the username of the $DEFAULT USER to $USER
-RUN sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -l $USER $DEFAULT_USER' /etc/cont-init.d/userconf && \
-    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -u $USERID $USER' /etc/cont-init.d/userconf && \
-    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ cp -r \/root\/ \/home\/$USER' /etc/cont-init.d/userconf && \
-    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -d \/home\/$USER $USER' /etc/cont-init.d/userconf && \
-    sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ groupmod -g $GROUPID -n $USER $DEFAULT_USER' /etc/cont-init.d/userconf && \
-    sed -i 's/.*chown -R $USER \/home\/$USER.*/chown -R $USER:$USER \/home\/$USER/' /etc/cont-init.d/userconf
-
+COPY ./etc/cont-init.d /etc/cont-init.d
 
 #Install the bipca scripts
 
@@ -125,7 +106,7 @@ RUN sed -i '/.*chown -R $USER \/home\/$USER/i \ \ \ \ usermod -l $USER $DEFAULT_
 # first copy to /bipca. this will be the default package that is pip installed at runtime.
 COPY ./bipca/python /bipca
 # the script for normalization methods
-COPY runNormalization.r /bipca-experiments/runNormalization.r
-RUN ln -s /bipca-experiments/runNormalization.r /opt/conda/bin/runNormalization.r
+COPY ./bipca-experiment/runNormalization.r /bipca-experiment/runNormalization.r
+RUN ln -s /bipca-experiment/runNormalization.r /opt/conda/bin/runNormalization.r
 
 ENTRYPOINT ["service_entrypoint.sh"]
