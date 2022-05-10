@@ -31,7 +31,6 @@ dependencies:
   - netcdf4
   - bedtools
   - htslib
-  - texlive-core
   - tqdm
   - ccache
   - jupyterlab
