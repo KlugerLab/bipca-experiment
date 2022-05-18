@@ -1,7 +1,7 @@
 # To set up a development environment using conda run:
 #
 #   conda env create -f environment.yml
-#   conda activate mpl-dev
+#   conda activate bipca-experiment
 #   pip install -e .
 name: bipca-experiment
 channels:
@@ -36,6 +36,7 @@ dependencies:
   - jupyterlab
   - jupyter
   - pybedtools 
+  - zarr
   - pip:
     - --requirement requirements.txt
 
