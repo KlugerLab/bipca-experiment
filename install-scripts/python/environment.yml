@@ -37,6 +37,7 @@ dependencies:
   - jupyter
   - pybedtools 
   - zarr
+  - sphinx
   - pip:
     - --requirement requirements.txt
 
