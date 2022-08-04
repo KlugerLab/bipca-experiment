@@ -1,7 +1,7 @@
---find-links https://download.pytorch.org/whl/torch_stable.html
-torch==1.10.1+cpu
 allcools
 python-benedict
 wheel
 numpydoc
 pydata_sphinx_theme
+line_profiler
+memory_profiler

@@ -12,6 +12,8 @@ dependencies:
   - python=3.9
   - pip
   - mkl
+  - cpuonly
+  - pytorch
   - matplotlib
   - pandas
   - scipy

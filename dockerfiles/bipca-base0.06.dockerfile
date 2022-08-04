@@ -3,9 +3,8 @@ FROM continuumio/miniconda3:4.10.3p1 AS python
 
 WORKDIR /docker
 RUN apt-get update -y && \
-        apt-get install -y build-essential && \
-        apt-get install -y texlive dvipng texlive-latex-extra \
-                            texlive-fonts-recommended cm-super
+        apt-get install -y build-essential
+
 
 COPY ./install-scripts/python /install-scripts/python
 
@@ -27,6 +26,8 @@ COPY --from=python /install-scripts /install-scripts
 RUN chmod -R 777 /root
 RUN chmod -R 777 /home/
 RUN chmod -R 777 /docker
+RUN  apt-get update -y && apt-get install -y texlive dvipng texlive-latex-extra \
+                            texlive-fonts-recommended cm-super
 #SET UP THE CONDA ENVIRONMENT
 ENV PATH /opt/conda/bin:/opt/conda/condabin:/opt/conda/bin:$PATH
 ENV CONDA_PREFIX=/opt/conda

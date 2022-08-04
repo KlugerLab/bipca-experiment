@@ -14,5 +14,4 @@ apt-get update -qq && apt-get -y --no-install-recommends install \
     unixodbc-dev \
     libglpk-dev \
     xdg-utils \
-    libhdf5-dev && \
-  rm -rf /var/lib/apt/lists/*
+    libhdf5-dev 
