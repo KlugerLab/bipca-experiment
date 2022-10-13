@@ -14,7 +14,7 @@ dependencies:
   - mkl
   - cpuonly
   - pytorch
-  - matplotlib
+  - matplotlib>=3.6.0
   - pandas
   - scipy
   - scikit-learn

@@ -5,3 +5,4 @@ numpydoc
 pydata_sphinx_theme
 line_profiler
 memory_profiler
+nose2
