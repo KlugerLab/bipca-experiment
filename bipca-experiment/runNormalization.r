@@ -13,8 +13,8 @@ suppressMessages({
 
 runNormalization <- function(adata_path,output_adata_path,no){
   # Mounted to where sanity is installed
-  sanity_installation_path <- "/Sanity"
-  tmp_path_sanity <- "/tmp"
+  sanity_installation_path <- "/Sanity/bin/Sanity"
+  tmp_path_sanity <- paste0(output_adata_path,"/tmp")
   
   # read the data from this path
   message("Loading the count data...")
