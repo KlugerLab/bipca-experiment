@@ -8,3 +8,4 @@ memory_profiler
 nose2
 pyarrow
 biomart
+ALRA @ git+https://github.com/pavlin-policar/ALRA.git

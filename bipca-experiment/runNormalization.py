@@ -4,7 +4,6 @@ import os, errno
 import scanpy as sc
 from bipca.experiments.experiments import log1p
 #!pip install git+https://github.com/pavlin-policar/ALRA.git
-#!python ALRA/setup.py install
 from ALRA import ALRA
 import scipy
 import numpy as np
@@ -63,7 +62,7 @@ def runNormalization(adata_path,output_path,output_adata,n_threads=10,no=[]):
         pass
     else:
         print("Running ALRA ...\n")
-        adata.layers['ALRA'] = ALRA.ALRA(X)
+        adata.layers['ALRA'] = ALRA(X)
 
     # If no, else run sanity
     if 'sanity' in no:
