@@ -28,11 +28,6 @@ def runNormalization(adata_path,output_path,output_adata,n_threads=10,no=[]):
     # Specify the temporary folder that will store the output from intermediate outputs from Sanity
     tmp_path_sanity = output_path + "/tmp/"
 
-    # convert to sparse matrix
-    if sparse.issparse(adata.X):
-        X = adata.X
-    else:
-        X = sparse.csr_matrix(adata.X)
     
     # Read data
     print("Loading count data ...\n")
@@ -41,7 +36,11 @@ def runNormalization(adata_path,output_path,output_adata,n_threads=10,no=[]):
     except FileNotFoundError:
         print("Error: Unable to find the h5ad file")
 
-        
+    # convert to sparse matrix
+    if sparse.issparse(adata.X):
+        X = adata.X
+    else:
+        X = sparse.csr_matrix(adata.X) 
     
     # If no, else run log1p  
     if ('log' in no) | ('log1p' in no) | ('logtransform' in no):
