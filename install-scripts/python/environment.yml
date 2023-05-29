@@ -40,6 +40,8 @@ dependencies:
   - pybedtools 
   - zarr
   - sphinx
+  - plink
+  - plink2
   - pip:
     - --requirement requirements.txt
 

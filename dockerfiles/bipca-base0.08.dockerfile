@@ -15,7 +15,7 @@ COPY ./docker-shell-scripts/_dockerfile_shell.sh /usr/local/bin/_dockerfile_shel
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
 
 
-FROM rocker/rstudio:4.2.3 as rstudio
+FROM rocker/rstudio:4.1.1 as rstudio
 #COPY ALL THE CONDA STUFF FROM THE PREVIOUS BUILD STAGE
 COPY --from=python /opt/conda /opt/conda
 COPY --from=python /docker /docker
