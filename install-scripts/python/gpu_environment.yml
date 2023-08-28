@@ -13,7 +13,7 @@ dependencies:
   - python=3.10
   - pip
   - mkl
-  - pytorch 
+  - pytorch::pytorch 
   - pytorch-cuda=CUDA_VERSION
   - matplotlib>=3.6.0
   - pandas
