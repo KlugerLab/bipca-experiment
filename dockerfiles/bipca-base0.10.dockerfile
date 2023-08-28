@@ -56,6 +56,8 @@ ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
 ENV CONDA_DEFAULT_ENV=bipca-experiment
 COPY ./docker-shell-scripts /usr/local/bin/
 COPY ./etc /etc/
+COPY ./root /root
+
 RUN echo "conda activate bipca-experiment" >> ~/.bashrc
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
 CMD ["/bin/bash"]
@@ -78,9 +80,14 @@ RUN sed -i "s|.*PATH=.*|PATH=$(echo $PATH)|" /etc/environment
 # modify the userconf startup script...
 FROM python as final
 # first copy to /bipca. this will be the default package that is pip installed at runtime.
-COPY ./bipca /bipca
-# the script for normalization methods
 COPY ./bipca-experiment /bipca-experiment/
+
+COPY ./bipca/ /bipca
+#hack to make setuptools-scm work with submodules
+RUN rm /bipca/.git
+COPY ./.git/modules/bipca /bipca/.git/
+
+# the script for normalization methods
 RUN ln -s /bipca-experiment/runNormalization.r /opt/conda/bin/runNormalization.r && \
      ln -s /bipca-experiment/runNormalization.py /opt/conda/bin/runNormalization.py
 ENTRYPOINT ["/usr/local/bin/service_entrypoint.sh"]
