@@ -61,7 +61,7 @@ def runNormalization(adata_path,output_path,output_adata,n_threads=10,no=[]):
         pass
     else:
         print("Running ALRA ...\n")
-        adata.layers['ALRA'] = ALRA(X)
+        adata.layers['ALRA'] = ALRA(log1p(X.toarray()))
 
     # If no, else run sanity
     if 'sanity' in no:
