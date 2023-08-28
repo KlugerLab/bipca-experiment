@@ -1,0 +1,48 @@
+# To set up a development environment using conda run:
+#
+#   conda env create -f environment.yml
+#   conda activate bipca-experiment
+#   pip install -e .
+name: bipca-experiment
+channels:
+  - conda-forge
+  - bioconda
+  - pytorch
+dependencies:
+  - python=3.10
+  - pip
+  - mkl
+  - cpuonly
+  - pytorch
+  - matplotlib>=3.6.0
+  - pandas
+  - scipy
+  - scikit-learn
+  - numpy
+  - seaborn
+  - statsmodels
+  - numba
+  - pytables
+  - igraph
+  - leidenalg
+  - xarray
+  - scanpy
+  - threadpoolctl
+  - plotly
+  - opentsne
+  - netcdf4
+  - bedtools
+  - htslib
+  - tqdm
+  - ccache
+  - jupyterlab
+  - jupyter
+  - pybedtools 
+  - zarr
+  - sphinx
+  - plink
+  - plink2
+  - pip:
+    - --requirement requirements.txt
+
+  

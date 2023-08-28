@@ -6,14 +6,15 @@
 name: bipca-experiment
 channels:
   - conda-forge
-  - pytorch
   - bioconda
+  - pytorch
+  - nvidia
 dependencies:
   - python=3.10
   - pip
   - mkl
-  - cpuonly
-  - pytorch
+  - pytorch 
+  - pytorch-cuda=CUDA_VERSION
   - matplotlib>=3.6.0
   - pandas
   - scipy

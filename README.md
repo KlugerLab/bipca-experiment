@@ -24,7 +24,7 @@ The environment variables for this image are important.  They are:
 7) `RSTUDIO`: enable `rstudio` on container start. Default `true`
 
 ### `bipca` installation
-By default, this image installs `bipca` **at runtime** using `pip install -e /bipca`. What does this mean? Any directory that is a valid python module can be mounted at `/bipca` and installed. In particular, we use this for development of `bipca`: by mounting a host copy of the `bipca` github repo to `/bipca`, we can make changes to the source code that propagate into the container. Without any mounting, the `python` directory of a version of `bipca` (whichever version was last pulled into the submodule of this repo) was copied to `/bipca` when the image was built, so that version is installed. If a host-local `bipca/python` from the `bipca` github repository is mounted at the containers `/bipca` on runtime, the container `pip` will monitor host-side changes to `bipca` (such as pulling the latest commits from master, changing branches, or adding new code). 
+By default, this image installs `bipca` **at runtime** using `pip install -e /bipca/python`. What does this mean? Any directory that is a valid python module can be mounted at `/bipca` and installed. In particular, we use this for development of `bipca`: by mounting a host copy of the `bipca` github repo to `/bipca`, we can make changes to the source code that propagate into the container. Without any mounting, the `python` directory of a version of `bipca` (whichever version was last pulled into the submodule of this repo) was copied to `/bipca` when the image was built, so that version is installed. If a host-local `bipca` from the `bipca` github repository is mounted at the containers `/bipca` on runtime, the container `pip` will monitor host-side changes to `bipca` (such as pulling the latest commits from master, changing branches, or adding new code). 
 
 ### Breakdown of image runtime
 Let's review what exactly this container does given the default settings.
@@ -37,7 +37,7 @@ Let's review what exactly this container does given the default settings.
 ### An example run command
 The following command was used for all experiments in the paper:
 
-`docker run -it --rm -p 8080:8080 -p 8029:8787 -e USER=$(id --name -u) -e USERID=$(id -g) --name bipca -v ~/bipca/python:/bipca -v /data:/data bipca-experiment:latest`
+`docker run -it --rm -p 8080:8080 -p 8029:8787 -e USER=$(id --name -u) -e USERID=$(id -g) --name bipca -v ~/bipca:/bipca -v /data:/data bipca-experiment:latest`
 
 Its anatomy:
 1) `docker run ... bipca-experiment:latest` run a container from the image `bipca-experiment:latest`
@@ -48,7 +48,7 @@ Its anatomy:
 6) `-e USER=$(id --name -u)` rename the default user to the user that is calling `docker run`. This changes the rstudio username, as well as any places **within the container** that the username is shown, such as the shell prompt or `ps`
 7) `-e USERID=$(id -g)` change the id of $USER to the id of the current user on the host. This is especially important on systems which run docker native, e.g. linux, as processes run within the container (for example `jupyter-lab` or `r-session`) will export to the host's process manager (viewed by `htop` or `ps`) under this `$USERID`. By setting it to the current user, you ensure that your docker processes are mapped correctly to your username in the host.
 8) `--name bipca` names the forthcoming container as `bipca`, which makes it easy to manipulate outside of the container
-9) `-v ~/bipca/python:/bipca` mount the python directory of the host side bipca installation at `/home/$(id --name -u)/bipca/python`(or whatever your shell links to `~`) to the container-side volume `/bipca` (see above section "`bipca` installation".
+9) `-v ~/bipca:/bipca` mount the directory of the host side bipca installation at `/home/$(id --name -u)/bipca`(or whatever your shell links to `~`) to the container-side volume `/bipca` (see above section "`bipca` installation".
 11) `-v /data:/data` mount the host `/data` directory as a volume in the container at `/data`. As with any volume mounted in this way, changes made to the container `/data` will persist into the host `/data`. 
 
 
