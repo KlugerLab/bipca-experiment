@@ -26,8 +26,8 @@ ARG GITHUB_PAT=''
 ENV GITHUB_PAT=$GITHUB_PAT
 
 RUN install-scripts/R/install_deps.sh  && \
-  install-scripts/R/install_tidyverse.sh && \
-  install-scripts/R/install_bio.sh
+    install-scripts/R/install_tidyverse.sh && \
+    install-scripts/R/install_bio.sh
 
 RUN unset GITHUB_PAT
 FROM rstudio1 as sanity
@@ -86,10 +86,9 @@ COPY ./bipca/ /bipca
 #hack to make setuptools-scm work with submodules
 RUN rm /bipca/.git
 COPY ./.git/modules/bipca /bipca/.git/
-RUN chmod -R 777 /bipca && \
-    pip install -e /bipca/python
+RUN chmod -R 777 /bipca
 
 # the script for normalization methods
 RUN ln -s /bipca-experiment/runNormalization.r /opt/conda/bin/runNormalization.r && \
-     ln -s /bipca-experiment/runNormalization.py /opt/conda/bin/runNormalization.py
+    ln -s /bipca-experiment/runNormalization.py /opt/conda/bin/runNormalization.py
 ENTRYPOINT ["/usr/local/bin/service_entrypoint.sh"]
