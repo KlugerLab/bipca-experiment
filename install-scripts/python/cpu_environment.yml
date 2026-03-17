@@ -7,6 +7,7 @@ name: bipca-experiment
 channels:
   - conda-forge
   - bioconda
+  - nodefaults
 dependencies:
   - python=3.10
   - pip
