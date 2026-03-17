@@ -16,13 +16,13 @@ trap cleanup EXIT
 
 echo ""
 echo "--- Starting container ---"
-docker run -d --gpus all -p 8787:8787 -p 8888:8888 --name $CONTAINER $IMAGE
+docker run -d --gpus all -p 18787:8787 -p 18888:8888 --name $CONTAINER $IMAGE
 sleep 5
 docker logs $CONTAINER
 
 echo ""
 echo "--- torch + CUDA ---"
-docker exec $CONTAINER python -c "
+docker exec $CONTAINER /opt/conda/envs/bipca-experiment/bin/python -c "
 import torch
 print('torch:', torch.__version__)
 print('CUDA available:', torch.cuda.is_available())
@@ -36,7 +36,7 @@ docker exec $CONTAINER bash -c "bedtools --version && plink --version && plink2 
 
 echo ""
 echo "--- pip packages ---"
-docker exec $CONTAINER python -c "
+docker exec $CONTAINER /opt/conda/envs/bipca-experiment/bin/python -c "
 import scanpy, leidenalg, igraph, numba, tables, scipy, sklearn, pandas, numpy
 print('scanpy:', scanpy.__version__)
 print('leidenalg:', leidenalg.version)
@@ -46,11 +46,11 @@ print('all imports ok')
 
 echo ""
 echo "--- bipca package ---"
-docker exec $CONTAINER python -c "import bipca; print('bipca:', bipca.__version__)"
+docker exec $CONTAINER /opt/conda/envs/bipca-experiment/bin/python -c "import bipca; print('bipca:', bipca.__version__)"
 
 echo ""
 echo "--- bipca unit tests ---"
-docker exec $CONTAINER bash -c "cd /bipca && python -m pytest python/tests/ -x -q"
+docker exec $CONTAINER bash -c "cd /bipca && /opt/conda/envs/bipca-experiment/bin/python -m pytest python/tests/ -x -q"
 
 echo ""
 echo "=== All tests passed ==="
