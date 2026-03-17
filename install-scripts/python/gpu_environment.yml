@@ -13,7 +13,6 @@ dependencies:
   - pip
   - mkl
   - numba
-  - numpy<2
   - pytables
   - bedtools
   - htslib
