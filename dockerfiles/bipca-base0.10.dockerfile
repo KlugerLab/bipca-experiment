@@ -86,6 +86,7 @@ COPY ./bipca/ /bipca
 #hack to make setuptools-scm work with submodules
 RUN rm /bipca/.git
 COPY ./.git/modules/bipca /bipca/.git/
+RUN chmod -R 777 /bipca
 
 # the script for normalization methods
 RUN ln -s /bipca-experiment/runNormalization.r /opt/conda/bin/runNormalization.r && \
