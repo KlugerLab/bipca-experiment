@@ -13,8 +13,6 @@ dependencies:
   - python=3.10
   - pip
   - mkl
-  - pytorch::pytorch 
-  - pytorch-cuda=CUDA_VERSION
   - matplotlib>=3.6.0
   - pandas
   - scipy
@@ -44,6 +42,7 @@ dependencies:
   - plink
   - plink2
   - pip:
+    - torch --index-url https://download.pytorch.org/whl/cuCUDA_VERSION_SHORT
     - --requirement requirements.txt
 
   
