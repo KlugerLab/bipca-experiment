@@ -7,43 +7,19 @@ name: bipca-experiment
 channels:
   - conda-forge
   - bioconda
-  - pytorch
-  - nvidia
+  - nodefaults
 dependencies:
   - python=3.10
   - pip
   - mkl
-  - pytorch::pytorch 
-  - pytorch-cuda=CUDA_VERSION
-  - matplotlib>=3.6.0
-  - pandas
-  - scipy
-  - scikit-learn
-  - numpy
-  - seaborn
-  - statsmodels
   - numba
+  - llvmlite
   - pytables
-  - igraph
-  - leidenalg
-  - xarray
-  - scanpy
-  - threadpoolctl
-  - plotly
-  - opentsne
-  - netcdf4
   - bedtools
   - htslib
-  - tqdm
-  - ccache
-  - jupyterlab
-  - jupyter
-  - pybedtools 
-  - zarr
-  - sphinx
+  - pybedtools
   - plink
   - plink2
+  - ccache
   - pip:
     - --requirement requirements.txt
-
-  

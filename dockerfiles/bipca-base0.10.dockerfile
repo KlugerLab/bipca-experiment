@@ -26,8 +26,8 @@ ARG GITHUB_PAT=''
 ENV GITHUB_PAT=$GITHUB_PAT
 
 RUN install-scripts/R/install_deps.sh  && \
-  install-scripts/R/install_tidyverse.sh && \
-  install-scripts/R/install_bio.sh
+    install-scripts/R/install_tidyverse.sh && \
+    install-scripts/R/install_bio.sh
 
 RUN unset GITHUB_PAT
 FROM rstudio1 as sanity
@@ -53,12 +53,14 @@ ARG CUDA_VERSION=''
 RUN install-scripts/python/install_python.sh && \
     install-scripts/python/install_torch.sh $CUDA_VERSION
 ENV PATH /opt/conda/envs/bipca-experiment/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/conda/envs/bipca-experiment/lib:$LD_LIBRARY_PATH
 ENV CONDA_DEFAULT_ENV=bipca-experiment
 COPY ./docker-shell-scripts /usr/local/bin/
 COPY ./etc /etc/
 COPY ./root /root
 
-RUN echo "conda activate bipca-experiment" >> ~/.bashrc
+RUN echo "conda activate bipca-experiment" >> ~/.bashrc && \
+    echo 'export LD_LIBRARY_PATH=/opt/conda/envs/bipca-experiment/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 SHELL ["/usr/local/bin/_dockerfile_shell.sh"]
 CMD ["/bin/bash"]
 # modify the path to make pip happy
@@ -86,8 +88,9 @@ COPY ./bipca/ /bipca
 #hack to make setuptools-scm work with submodules
 RUN rm /bipca/.git
 COPY ./.git/modules/bipca /bipca/.git/
+RUN chmod -R 777 /bipca
 
 # the script for normalization methods
 RUN ln -s /bipca-experiment/runNormalization.r /opt/conda/bin/runNormalization.r && \
-     ln -s /bipca-experiment/runNormalization.py /opt/conda/bin/runNormalization.py
+    ln -s /bipca-experiment/runNormalization.py /opt/conda/bin/runNormalization.py
 ENTRYPOINT ["/usr/local/bin/service_entrypoint.sh"]
